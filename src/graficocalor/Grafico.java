@@ -7,6 +7,12 @@ package graficocalor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.layout.Border;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,48 +27,66 @@ public class Grafico extends javax.swing.JFrame {
     private JTable table;
     private JScrollPane scrollPane;
 
-  
-
     public Grafico() {
-        // configuração do JFrame
-        setTitle("Uma Tabela Simples");
-        setSize(300, 200);
-        setBackground(Color.gray);
+        LeituraArquivo arquivo = new LeituraArquivo();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setUndecorated(true);
+        this.setAlwaysOnTop(true);
+        this.setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        try {
+            arquivo.lerArquivos();
 
-        // Cria o painel
-        topPanel = new JPanel();
-        topPanel.setLayout(new BorderLayout());
-        getContentPane().add(topPanel);
+           
 
-        // Cria os nomes das colunas
-        Object[] colunas = new Object[]{"coluna 1", "coluna 2", "coluna 3"};
+            // Cria o painel
+            topPanel = new JPanel();
+            topPanel.setLayout(new BorderLayout());
+            getContentPane().add(topPanel);
 
-        // Cria os dados, array com 3 linha e 3 colunas
-        Object[][] valores = new Object[3][3];
-        for (int i = 0; i < 3; i++) {
-            valores[i][0] = "1";
-            valores[i][1] = "5";
-            valores[i][2] = "10";
-        }
+            // Cria os nomes das colunas
+            Object[] colunas = new Object[]{"coluna 1","nomes"};
 
-        // Cria o JTable
-        table = new JTable(valores, colunas);
-        table.setTableHeader(null);
-        for (int i = 0; i < table.getRowCount(); i++) {
-            for (int j = 0; j < table.getColumnCount(); j++) {
-                int cor = Integer.parseInt(table.getValueAt(i, j).toString());
-                table.setDefaultRenderer(Object.class,new teste()); 
+            // Cria os dados, array com 3 linha e 3 colunas
+            List<Double> dados = arquivo.pegarValor();
+
+            Object[][] valores = new Object[dados.size()][2];
+            for (int i = 0; i < dados.size(); i++) {
+                valores[i][0] = dados.get(i).toString();
+
+            }
+            List<String> nomes = arquivo.pegarNomes();
+            for (int i = 0; i < nomes.size(); i++) {
+                valores[i][1] = nomes.get(i).toString();
+
+            }
+
+            // Cria o JTable
+            table = new JTable(valores, colunas);
+            table.setTableHeader(null);
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+            
+
+            for (int i = 0; i < table.getRowCount(); i++) {
+                for (int j = 0; j < table.getColumnCount(); j++) {
+                    //Double teste = Double.parseDouble(table.getValueAt(i, j).toString());
+
+                    table.setDefaultRenderer(Object.class, new teste());
+                }
+
             }
             
+
+            // Adiciona o JTable dentro do painel
+            scrollPane = new JScrollPane(table);
+            topPanel.add(scrollPane, BorderLayout.CENTER);
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Grafico.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-               
-
-        // Adiciona o JTable dentro do painel
-        scrollPane = new JScrollPane(table);
-        topPanel.add(scrollPane, BorderLayout.CENTER);
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -119,6 +143,7 @@ public class Grafico extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new Grafico().setVisible(true);
 
             }

@@ -24,16 +24,30 @@ public class teste extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-      
-                float cor = Float.parseFloat(table.getValueAt(row, column).toString());
-                cor = cor / 10;
-                cor = 255 * cor;
-                int result = Math.round(cor);
-                cellComponent.setBackground(new Color(255, result, 0));
+        try {
+
+            Double cor = Double.parseDouble(table.getValueAt(row, column).toString());
+
+            cor = 510 * cor;
+            int result = (int) Math.round(cor);
             
+            System.out.println("" + result);
+            if (result >= 255) {
+                result -= 510;
+                result *= -1;
+                cellComponent.setForeground(new Color(255, result, 0));
+                cellComponent.setBackground(new Color(255, result, 0));
+            } else {
+                cellComponent.setForeground(new Color(result, 255, 0));
+                cellComponent.setBackground(new Color(result, 255, 0));
+            }
 
+            
+        } catch (Exception e) {
+             cellComponent.setForeground(Color.BLACK);
+                cellComponent.setBackground(Color.WHITE);
+        }
         
-
         return cellComponent;
     }
 }
