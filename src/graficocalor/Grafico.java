@@ -29,10 +29,7 @@ public class Grafico extends javax.swing.JFrame {
 
     public Grafico() {
         LeituraArquivo arquivo = new LeituraArquivo();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setUndecorated(true);
-        this.setAlwaysOnTop(true);
-        this.setResizable(false);
+        setSize(1080, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         try {
