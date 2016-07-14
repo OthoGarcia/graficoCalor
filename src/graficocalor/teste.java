@@ -29,7 +29,8 @@ public class teste extends DefaultTableCellRenderer {
             Double cor = Double.parseDouble(table.getValueAt(row, column).toString());
             Double nome = cor;
             int result = porcento(cor);
-
+            cor = cor  * 510;
+            result = (int) Math.round(cor);
             System.out.println("" + result);
             if (result >= 255) {
                 result -= 510;
